@@ -1,19 +1,33 @@
 img = "";
 status = "";
 objects = [];
-
-function preload(){
-img = loadImage("cream.jpg")
-img = loadImage("box.jpg")
-img = loadImage("buds.jpg")
-img = loadImage("pen.jpg")
-img = loadImage("remote.jpg")
+function preload()
+{
+    img = loadImage("cream.jpg")
 }
 
-function setup() {
+function setup()
+{
     canvas = createCanvas(640, 420);
-    canvas.center();
+    canvas.center(); 
+    objectDetector = ml5.objectDetector('cocossd', modelLoaded);
+    document.getElementById("status").innerHTML = "Status : Detecting Objects";
 }
+
+function modelLoaded() {
+    console.log("Model Loaded!")
+    status = true;
+    objectDetector.detect(img, gotResult);
+    }
+
+    function gotResult(error, results)  
+    {
+        if(error) {
+            console.log(error);
+        }
+        console.log(results);
+        objects = results;
+        }
 
 function draw() {
     image(video, 0, 0, 640, 420);
